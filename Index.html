@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Amor | Edición Especial</title>
+    <!-- Fuentes Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-dark: #31065a;
+            --primary: #6a1b9a;
+            --primary-light: #e1bee7;
+            --accent: #ba68c8;
+            --paper-bg: #fdfbf7;
+            --text-dark: #2c2536;
+            --text-muted: #5c5368;
+            --transition-smooth: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #090214;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+
+        /* ----- LIENZO INTERACTIVO DE VANGUARDIA ----- */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Luces de neón ambientales de fondo */
+        .ambient-aurora {
+            position: fixed;
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(circle, rgba(106, 27, 154, 0.25) 0%, rgba(13, 4, 31, 0) 70%);
+            top: -10%;
+            left: -10%;
+            z-index: 0;
+            filter: blur(80px);
+            animation: drift 20s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        .ambient-aurora.two {
+            background: radial-gradient(circle, rgba(186, 104, 200, 0.18) 0%, rgba(13, 4, 31, 0) 70%);
+            bottom: -10%;
+            right: -10%;
+            top: auto;
+            left: auto;
+            animation: drift 25s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes drift {
+            0% { transform: scale(1) translate(0, 0) rotate(0deg); }
+            100% { transform: scale(1.3) translate(8%, 12%) rotate(90deg); }
+        }
+
+        /* ----- ARQUITECTURA DEL SOBRE ----- */
+        .scene-container {
+            position: relative;
+            width: 420px;
+            height: 300px;
+            z-index: 10;
+            transform-style: preserve-3d;
+            transition: var(--transition-smooth);
+            will-change: transform;
+        }
+
+        .envelope-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #5c1389, #2b0454);
+            border-radius: 14px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: var(--transition-smooth);
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 50px 90px rgba(0, 0, 0, 0.7);
+        }
+
+        .envelope-front-flaps {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .envelope-front-flaps::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(35deg, #6a1b9a, #521078);
+            clip-path: polygon(0 100%, 50% 48%, 100% 100%);
+            border-radius: 0 0 14px 14px;
+        }
+
+        .envelope-front-flaps::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #7b1fa2, #3b0963);
+            clip-path: polygon(0 0, 0 100%, 48% 50%);
+            border-radius: 14px 0 0 14px;
+        }
+
+        .right-flap {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(215deg, #7b1fa2, #3b0963);
+            clip-path: polygon(100% 0, 100% 100%, 52% 50%);
+            border-radius: 0 14px 14px 0;
+            z-index: 3;
+        }
+
+        .top-flap {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 100%;
+            height: 152px;
+            background: linear-gradient(180deg, #7b1fa2, #5c1389);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s, z-index 0.1s linear 0.5s;
+            z-index: 4;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 125px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 48px;
+            height: 48px;
+            background: radial-gradient(circle, #d1c4e9 0%, #7e57c2 100%);
+            border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.5);
+            transition: var(--transition-smooth);
+        }
+
+        .wax-seal svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            text-align: center;
+            color: #e1bee7;
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-weight: 400;
+            text-transform: uppercase;
+            opacity: 0.8;
+            animation: pulseText 2s infinite ease-in-out;
+            z-index: 5;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.4; transform: scale(0.97); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ----- LA CARTA ----- */
+        .letter-card {
+            position: absolute;
+            bottom: 10px;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: var(--paper-bg);
+            border-radius: 8px;
+            padding: 40px 35px;
+            box-sizing: border-box;
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.1s, 
+                        bottom 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.1s, 
+                        height 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.1s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+        }
+
+        .letter-content {
+            opacity: 0;
+            transition: opacity 0.5s ease 0.7s;
+            overflow-y: auto;
+        }
+
+        .letter-content::-webkit-scrollbar { width: 3px; }
+        .letter-content::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 10px; }
+
+        .letter-card h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .poem-block {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-align: center;
+            color: var(--text-dark);
+            line-height: 2;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
+        .letter-card p.dedication {
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 300;
+            margin-top: 15px;
+        }
+
+        .signature-area {
+            text-align: right;
+            margin-top: 30px;
+            border-top: 1px solid rgba(106, 27, 154, 0.1);
+            padding-top: 15px;
+        }
+
+        .signature-area .valediction {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .signature-area .name {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-style: italic;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-top: 5px;
+        }
+
+        .action-button {
+            width: 100%;
+            background: linear-gradient(135deg, #7b1fa2 0%, #31065a 100%);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(106, 27, 154, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .action-button:hover {
+            box-shadow: 0 8px 25px rgba(106, 27, 154, 0.6);
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* ----- DISPARADORES DE ANIMACIÓN (JS) ----- */
+        .scene-container.is-open .top-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+            transition: transform 0.5s ease-in-out, z-index 0.1s linear 0.2s;
+        }
+
+        .scene-container.is-open .wax-seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.3);
+            pointer-events: none;
+        }
+
+        .scene-container.is-open .hint-text { opacity: 0; }
+
+        .scene-container.is-open .letter-card {
+            bottom: 120px;
+            height: 470px;
+            z-index: 5;
+            opacity: 1;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .scene-container.is-open .letter-content { opacity: 1; }
+
+        /* Partículas Explosión */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            animation: riseAndFade 2.2s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes riseAndFade {
+            0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(1.4) rotate(var(--mr)); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Capas de Iluminación Aurora -->
+    <div class="ambient-aurora"></div>
+    <div class="ambient-aurora two"></div>
+
+    <!-- Canvas de Ingeniería de Partículas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Escena Interactiva -->
+    <div class="scene-container" id="sceneContainer">
+        
+        <div class="envelope-wrapper" id="envelope">
+            <div class="top-flap"></div>
+            <div class="right-flap"></div>
+            <div class="envelope-front-flaps"></div>
+            
+            <div class="wax-seal">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            
+            <div class="hint-text">Abrir con un clic</div>
+        </div>
+
+        <div class="letter-card" id="letterCard">
+            <div class="letter-content">
+                <h1>Para la dueña de mi corazón</h1>
+                
+                <div class="poem-block">
+                    No supe del destino hasta tus ojos,<br>
+                    ni supe del amor hasta tu boca,<br>
+                    eres el faro que calma mis antojos<br>
+                    y la dulce locura que me toca.<br><br>
+                    Si el universo entero se apagara<br>
+                    y el sol guardara su último destello,<br>
+                    me bastaría con mirar tu cara<br>
+                    para entender que el mundo sigue bello.
+                </div>
+
+                <p class="dedication">
+                    Gracias por transformar por completo mi realidad, por brindarme tu luz y por recordarme con tu sola existencia la belleza del mundo.
+                </p>
+
+                <div class="signature-area">
+                    <div class="valediction">Por siempre tuyo,</div>
+                    <div class="name">Anthony</div>
+                </div>
+
+                <button class="action-button" id="triggerBtn">Para Toda La Vida 💜</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const sceneContainer = document.getElementById('sceneContainer');
+        const envelope = document.getElementById('envelope');
+        const triggerBtn = document.getElementById('triggerBtn');
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+        // Ajuste de dimensiones dinámico del Lienzo
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Clase Partícula de Élite (Dibuja pétalos de tulipán estilizados y destellos)
+        class AmbientParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height; // Distribución inicial en pantalla
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 5 + 3;
+                this.speedY = Math.random() * 0.8 + 0.4;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.6 + 0.2;
+                this.type = Math.random() > 0.4 ? 'petal' : 'sparkle';
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = Math.random() * 0.02 - 0.01;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                // Aplicar leve inercia del ratón para el efecto Parallax tridimensional
+                this.x += this.speedX + (mouse.x * 0.05); 
+                this.rotation += this.rotationSpeed;
+
+                if (this.y < -20 || this.x < -20 || this.x > canvas.width + 20) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+
+                if (this.type === 'petal') {
+                    // Geometría matemática de un pétalo de tulipán morado
+                    ctx.fillStyle = Math.random() > 0.5 ? '#7b1fa2' : '#ba68c8';
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.bezierCurveTo(-this.size * 1.5, -this.size, -this.size, -this.size * 2.5, 0, -this.size * 3);
+                    ctx.bezierCurveTo(this.size, -this.size * 2.5, this.size * 1.5, -this.size, 0, 0);
+                    ctx.fill();
+                } else {
+                    // Destellos de luz mágica dorada/lila
+                    ctx.fillStyle = '#f3e5f5';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#e1bee7';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size * 0.4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        // Inicializar motor de partículas (100 elementos estables para no saturar CPU)
+        function initCanvasParticles() {
+            particles = [];
+            for(let i = 0; i < 100; i++) {
+                particles.push(new AmbientParticle());
+            }
+        }
+
+        // Bucle de Renderizado Principal (60 FPS estables)
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Suavizar la entrada física del ratón
+            mouse.x += (mouse.targetX - mouse.x) * 0.08;
+            mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+            // Mover la escena sutilmente en base al ratón para dar profundidad
+            sceneContainer.style.transform = `rotateY(${mouse.x * 12}deg) rotateX(${-mouse.y * 12}deg)`;
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+
+        // Captura de movimiento (Ratón y Pantalla Táctil)
+        window.addEventListener('mousemove', (e) => {
+            mouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.targetY = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouse.targetX = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouse.targetY = (e.touches[0].clientY / window.innerHeight) * 2 - 1;
+            }
+        });
+
+        // Activadores del sobre
+        envelope.addEventListener('click', () => {
+            sceneContainer.classList.add('is-open');
+        });
+
+        // Explosión del botón final
+        triggerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const burstCount = 45;
+            const btnRect = triggerBtn.getBoundingClientRect();
+            const originX = btnRect.left + btnRect.width / 2;
+            const originY = btnRect.top + btnRect.height / 2;
+
+            for (let i = 0; i < burstCount; i++) {
+                createHeartParticle(originX, originY);
+            }
+        });
+
+        function createHeartParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.classList.add('heart-particle');
+            const luxuryHearts = ['💜', '🔮', '✨', '🌸', '🌷'];
+            particle.innerHTML = luxuryHearts[Math.floor(Math.random() * luxuryHearts.length)];
+            
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.fontSize = `${Math.random() * 14 + 16}px`;
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 200 + 80;
+            const mx = Math.cos(angle) * velocity;
+            const my = Math.sin(angle) * velocity - 120;
+            const mr = Math.random() * 360 - 180;
+
+            particle.style.setProperty('--mx', `${mx}px`);
+            particle.style.setProperty('--my', `${my}px`);
+            particle.style.setProperty('--mr', `${mr}deg`);
+
+            document.body.appendChild(particle);
+            setTimeout(() => { particle.remove(); }, 2200);
+        }
+
+        // Ejecución de Sistemas
+        initCanvasParticles();
+        animateCanvas();
+    </script>
+</body>
+</html>
